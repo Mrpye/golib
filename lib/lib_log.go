@@ -49,16 +49,21 @@ func ActionLog(Header string, char rune) {
 	log.Println(colour(string(b)))
 	log.Println(colour("** "+Header) + colour(" **"))
 	log.Println(colour(string(b)))
-	if char == '-' || char == '<' {
-		fmt.Println("")
-		fmt.Println("")
-	}
+	//if char == '-' || char == '<' {
+	//fmt.Println("")
+	//fmt.Println("")
+	//}
 }
 
 // ActionLogOK is a function to log a header with a line of characters and a OK
 func ActionLogOK(Header string, char rune) {
 	color := color.FgGreen.Render
 	ActionLog(fmt.Sprintf("%s: %s", Header, color("OK")), char)
+}
+
+func ActionLogFail(Header string, char rune) {
+	color := color.FgRed.Render
+	ActionLog(fmt.Sprintf("%s: %s", Header, color("Fail")), char)
 }
 
 // PrintlnOK is a function to log a message with a OK with a new line
