@@ -9,6 +9,14 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	uuid "github.com/nu7hatch/gouuid"
+)
+
+const (
+	INPUT_TYPE_BOOL  = "bool"
+	INPUT_TYPE_INT   = "int"
+	INPUT_TYPE_FLOAT = "float"
 )
 
 //GzipBase64String gzip and base 64 a string
@@ -55,7 +63,10 @@ func IsNumber(s string) bool {
 // GetDomainOrIP returns the domain or IP from a URL
 func GetDomainOrIP(url_str string) string {
 	u, _ := url.Parse(url_str)
-	host, _, _ := net.SplitHostPort(u.Host)
+	host, _, err := net.SplitHostPort(u.Host)
+	if err != nil {
+		host = u.Host
+	}
 	return host
 }
 
@@ -96,13 +107,13 @@ func InsertString(orig []string, index int, value string) []string {
 
 // castStringToType casts a string to a type
 func CastStringToType(input_type string, value interface{}) interface{} {
-	if input_type == "bool" {
+	if input_type == INPUT_TYPE_BOOL {
 		b1, _ := strconv.ParseBool(value.(string))
 		return b1
-	} else if input_type == "int" {
+	} else if input_type == INPUT_TYPE_INT {
 		b1, _ := strconv.ParseInt(value.(string), 10, 64)
 		return b1
-	} else if input_type == "float" {
+	} else if input_type == INPUT_TYPE_FLOAT {
 		b1, _ := strconv.ParseFloat(value.(string), 64)
 		return b1
 	}
@@ -118,4 +129,29 @@ func CommaListContainsString(string_list string, str string) bool {
 		}
 	}
 	return false
+}
+
+func CreateKey(value string, replace_with string) string {
+	//Lets make lowercase and remove spaces
+	value = strings.ToLower(value)
+	value = strings.ReplaceAll(value, " ", replace_with)
+	return value
+}
+
+func CreateKeyOrGUID(value string, replace_with string) (string, error) {
+	//**************************************
+	//If no name is passed just generate one
+	//**************************************
+	if value == "" {
+		u, err := uuid.NewV4()
+		if err != nil {
+			return value, err
+		}
+		value = u.String()
+		return value, nil
+	}
+	//Lets make lowercase and remove spaces
+	value = strings.ToLower(value)
+	value = strings.ReplaceAll(value, " ", replace_with)
+	return value, nil
 }

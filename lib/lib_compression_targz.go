@@ -16,10 +16,8 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
-	"syscall"
 )
 
 // Compress creates a archive from the folder inputFilePath points to in the file outputFilePath points to.
@@ -27,12 +25,12 @@ import (
 // It tries to create the directory structure outputFilePath contains if it doesn't exist.
 // It returns potential errors to be checked or nil if everything works.
 func Compress(inputFilePath, outputFilePath string) (err error) {
-	inputFilePath = stripTrailingSlashes(inputFilePath)
+	inputFilePath = StripTrailingSlashes(inputFilePath)
 	inputFilePath, outputFilePath, err = makeAbsolute(inputFilePath, outputFilePath)
 	if err != nil {
 		return err
 	}
-	undoDir, err := mkdirAll(filepath.Dir(outputFilePath), 0755)
+	undoDir, err := MakeDirAllWithRemove(filepath.Dir(outputFilePath), 0755)
 	if err != nil {
 		return err
 	}
@@ -55,12 +53,12 @@ func Compress(inputFilePath, outputFilePath string) (err error) {
 // It tries to create the directory structure outputFilePath contains if it doesn't exist.
 // It returns potential errors to be checked or nil if everything works.
 func Extract(inputFilePath, outputFilePath string) (err error) {
-	outputFilePath = stripTrailingSlashes(outputFilePath)
+	outputFilePath = StripTrailingSlashes(outputFilePath)
 	inputFilePath, outputFilePath, err = makeAbsolute(inputFilePath, outputFilePath)
 	if err != nil {
 		return err
 	}
-	undoDir, err := mkdirAll(outputFilePath, 0755)
+	undoDir, err := MakeDirAllWithRemove(outputFilePath, 0755)
 	if err != nil {
 		return err
 	}
@@ -71,57 +69,6 @@ func Extract(inputFilePath, outputFilePath string) (err error) {
 	}()
 
 	return extract(inputFilePath, outputFilePath)
-}
-
-// Creates all directories with os.MakedirAll and returns a function to remove the first created directory so cleanup is possible.
-func mkdirAll(dirPath string, perm os.FileMode) (func(), error) {
-	var undoDir string
-
-	for p := dirPath; ; p = path.Dir(p) {
-		finfo, err := os.Stat(p)
-
-		if err == nil {
-			if finfo.IsDir() {
-				break
-			}
-
-			finfo, err = os.Lstat(p)
-			if err != nil {
-				return nil, err
-			}
-
-			if finfo.IsDir() {
-				break
-			}
-
-			return nil, &os.PathError{Op: "mkdirAll", Path: p, Err: syscall.ENOTDIR}
-		}
-
-		if os.IsNotExist(err) {
-			undoDir = p
-		} else {
-			return nil, err
-		}
-	}
-
-	if undoDir == "" {
-		return func() {}, nil
-	}
-
-	if err := os.MkdirAll(dirPath, perm); err != nil {
-		return nil, err
-	}
-
-	return func() { os.RemoveAll(undoDir) }, nil
-}
-
-// Remove trailing slash if any.
-func stripTrailingSlashes(path string) string {
-	if len(path) > 0 && path[len(path)-1] == '/' {
-		path = path[0 : len(path)-1]
-	}
-
-	return path
 }
 
 // Make input and output paths absolute.
