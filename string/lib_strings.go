@@ -1,4 +1,4 @@
-// Package string provides a set of functions for working with strings
+//Package string provides a set of functions for working with strings
 package string
 
 import (
