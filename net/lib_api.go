@@ -1,4 +1,5 @@
-package lib
+// This package contains helper functions for that are related to API calls.
+package net
 
 import (
 	"crypto/tls"
@@ -17,13 +18,15 @@ type Header struct {
 	Value string `yaml:"value"`
 }
 
-//BasicAuth function for creating the basic auth header
+// It takes a username and password, concatenates them with a colon, encodes the resulting string in
+// base64, and returns the encoded string
 func BasicAuth(username, password string) string {
 	auth := username + ":" + password
 	return base64.StdEncoding.EncodeToString([]byte(auth))
 }
 
-// CallApi function for calling an api
+// CallApi() is a function that takes a URL, a method, a list of headers, a payload, and a boolean to
+// ignore SSL errors. It returns a byte array of result data, a boolean, and an error
 func CallApi(url string, method string, headers []Header, payload io.Reader, ignore_ssl bool) ([]byte, bool, error) {
 	//****************************
 	//Create the connection string
@@ -62,13 +65,13 @@ func CallApi(url string, method string, headers []Header, payload io.Reader, ign
 	return responseData, true, nil
 }
 
-// CheckValidUrl checks if a string is a valid URL
+// If the host string contains either "http://" or "https://", return nil. Otherwise, return an error
 func CheckValidUrl(host string) error {
-	if strings.Contains(strings.ToLower(host), "http://") || strings.Contains(strings.ToLower(host), "https://") {
+	//Validate is a URL
+	if strings.Contains(host, "http://") || strings.Contains(host, "https://") {
 		return nil
-	} else {
-		return fmt.Errorf("host must be a valid URL")
 	}
+	return fmt.Errorf("Invalid URL: %s", host)
 }
 
 // RemoveURL removes http:// or https:// from a string

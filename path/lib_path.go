@@ -1,4 +1,5 @@
-package lib
+// Package path provides functions for manipulating file paths
+package path
 
 import (
 	"os"
@@ -6,7 +7,9 @@ import (
 	"strings"
 )
 
-// UserHomeDir returns the user's home directory
+// If the OS is Windows, return the HOMEDRIVE and HOMEPATH environment variables concatenated together.
+// If the OS is Linux, return the XDG_CONFIG_HOME environment variable. Otherwise, return the HOME
+// environment variable
 func UserHomeDir() string {
 	if runtime.GOOS == "windows" {
 		home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
@@ -23,7 +26,7 @@ func UserHomeDir() string {
 	return os.Getenv("HOME")
 }
 
-// Remove trailing slash if any.
+// If the path ends with a slash, remove it
 func StripTrailingSlashes(path string) string {
 	if strings.HasSuffix(path, "/") {
 		if len(path) > 0 && path[len(path)-1] == '/' {
