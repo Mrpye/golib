@@ -68,9 +68,12 @@ go get github.com/Mrpye/golib
 - Improved the convert
 
 ### v0.2.1
-- Fix the log.ActionLog
-- Lots of unit tests
-- Improved the convert
+- Fix the log.ActionLog formatting
+- added:
+    - ActionLogDT
+    - ActionLogDateOK
+    - ActionLogDateFail
+
 
 
 ## license
