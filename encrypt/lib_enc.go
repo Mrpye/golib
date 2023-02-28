@@ -1,4 +1,5 @@
-package lib
+// Package for working with encryption
+package encrypt
 
 import (
 	"crypto/aes"
@@ -11,12 +12,15 @@ import (
 	"log"
 )
 
+// It takes a string, converts it to a byte array, and then creates a hash of that byte array
 func createHash(key string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(key))
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
+// It takes a byte array and a passphrase, creates a hash from the passphrase, creates a cipher from
+// the hash, creates a nonce, and then encrypts the data with the nonce
 func encrypt(data []byte, passphrase string) ([]byte, error) {
 	block, _ := aes.NewCipher([]byte(createHash(passphrase)))
 	gcm, err := cipher.NewGCM(block)
@@ -31,6 +35,8 @@ func encrypt(data []byte, passphrase string) ([]byte, error) {
 	return ciphered, nil
 }
 
+// It takes a byte array and a passphrase, creates a hash from the passphrase, uses the hash as a key
+// to decrypt the byte array, and returns the decrypted byte array
 func decrypt(data []byte, passphrase string) ([]byte, error) {
 	key := []byte(createHash(passphrase))
 	block, err := aes.NewCipher(key)
@@ -53,19 +59,13 @@ func decrypt(data []byte, passphrase string) ([]byte, error) {
 	return plaintext, nil
 }
 
-// Base64EncString encodes a string to base64
+// It takes a string, converts it to a byte array, then encodes it to a base64 string
 func Base64EncString(value string) string {
 	sEnc := b64.StdEncoding.EncodeToString([]byte(value))
 	return sEnc
 }
 
-/*func DecodeB64(message string) (retour string) {
-	base64Text := make([]byte, base64.StdEncoding.DecodedLen(len(message)))
-	base64.StdEncoding.Decode(base64Text, []byte(message))
-	return strings.ReplaceAll(string(base64Text), "\x00", "")
-}*/
-
-// Base64DecString decodes a base64 string
+// It takes a string, decodes it from base64, and returns the decoded string
 func Base64DecString(value string) string {
 	sDec, err := b64.StdEncoding.DecodeString(value)
 	if err != nil {
@@ -75,7 +75,7 @@ func Base64DecString(value string) string {
 	return string(sDec)
 }
 
-// EncryptString encrypts a string
+// EncryptString takes a string and a password and returns a base64 encoded string
 func EncryptString(value string, pass_word string) (string, error) {
 	data, err := encrypt([]byte(value), pass_word)
 	if err != nil {
@@ -85,7 +85,7 @@ func EncryptString(value string, pass_word string) (string, error) {
 	return sEnc, nil
 }
 
-// DecryptString decrypts a string
+// DecryptString takes a string, decodes it from base64, decrypts it, and returns the decrypted string
 func DecryptString(value string, pass_word string) (string, error) {
 	sDec, err := b64.StdEncoding.DecodeString(value)
 	if err != nil {

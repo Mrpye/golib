@@ -1,4 +1,5 @@
-package lib
+// This package contains helper functions for that are related to console calls.
+package console
 
 import (
 	"os"

@@ -1,4 +1,5 @@
-package lib
+// Package for working with files
+package file
 
 import (
 	"fmt"
@@ -9,10 +10,8 @@ import (
 	"path"
 )
 
-// ZipFolder zips a folder
-
-// Download a file from a url
-func DownloadFile(filepath string, url string) error {
+// Download a file from a URL and save it to a filepath
+func DownloadFile(url string, filepath string) error {
 
 	// Get the data
 	resp, err := http.Get(url)
@@ -39,7 +38,7 @@ func DownloadFile(filepath string, url string) error {
 	return err
 }
 
-// CopyFile copies a file from src to dst.
+// It copies a file from one location to another
 func CopyFile(src, dst string) (int64, error) {
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
@@ -63,7 +62,8 @@ func CopyFile(src, dst string) (int64, error) {
 	return nBytes, err
 }
 
-// SaveStringToFile save string to file
+// It creates a directory if it doesn't exist, then creates a file if it doesn't exist, then writes the
+// content to the file
 func SaveStringToFile(filename string, content string) error {
 	if content != "" {
 		file := path.Dir(filename)
@@ -85,7 +85,7 @@ func SaveStringToFile(filename string, content string) error {
 	return nil
 }
 
-// ReadFileToString read file to string
+// Read the contents of a file into a string
 func ReadFileToString(sourceFile string) (string, error) {
 	input, err := ioutil.ReadFile(sourceFile)
 	if err != nil {
@@ -94,7 +94,7 @@ func ReadFileToString(sourceFile string) (string, error) {
 	return string(input), nil
 }
 
-// Check if File Exists
+// If the file exists, return true, otherwise return false
 func FileExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil

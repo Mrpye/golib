@@ -1,4 +1,5 @@
-package lib
+// Package string provides a set of functions for working with strings
+package string
 
 import (
 	"bytes"
@@ -19,7 +20,7 @@ const (
 	INPUT_TYPE_FLOAT = "float"
 )
 
-//GzipBase64String gzip and base 64 a string
+// It takes a string, compresses it, and then base64 encodes it
 func GzipBase64String(data string) (string, error) {
 	var b bytes.Buffer
 	gz := gzip.NewWriter(&b)
@@ -33,23 +34,22 @@ func GzipBase64String(data string) (string, error) {
 	return sEnc, nil
 }
 
-// RemoveSpacesForHyphens removes spaces and replaces them with hyphens
+// It takes a string, converts it to lowercase, replaces all spaces with hyphens, and returns the
+// string
 func RemoveSpacesForHyphens(name string) (string, error) {
-	//Lets make lowercase and remove spaces
 	name = strings.ToLower(name)
 	name = strings.ReplaceAll(name, " ", "-")
 	return name, nil
 }
 
-// RemoveSpacesForUnderscores removes spaces and replaces them with underscores
+// It takes a string, converts it to lowercase, and replaces all spaces with underscores
 func RemoveSpacesForUnderscores(name string) string {
-	//Lets make lowercase and remove spaces
 	name = strings.ToLower(name)
 	name = strings.ReplaceAll(name, " ", "_")
 	return name
 }
 
-// Concat concatenates strings
+// Concat takes a string and a list of strings and returns a string.
 func Concat(sep string, strs ...string) string {
 	return strings.Join(strs, sep)
 }
@@ -85,7 +85,8 @@ func GetPortInt(url_str string) int {
 	return intVar
 }
 
-// Clean cleans a string
+// It takes a string and replaces all non-alphanumeric characters with the string passed in as the
+// second argument
 func Clean(str string, replace string) string {
 	re, err := regexp.Compile(`[^\w]`)
 	if err == nil {

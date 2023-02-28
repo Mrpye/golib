@@ -1,11 +1,5 @@
 // Package targz contains methods to create and extract tar gz archives.
-//
-// Usage (discarding potential errors):
-//   	targz.Compress("path/to/the/directory/to/compress", "my_archive.tar.gz")
-//   	targz.Extract("my_archive.tar.gz", "directory/to/extract/to")
-// This creates an archive in ./my_archive.tar.gz with the folder "compress" (last in the path).
-// And extracts the folder "compress" to "directory/to/extract/to/". The folder structure is created if it doesn't exist.
-package lib
+package compression
 
 import (
 	"archive/tar"
@@ -18,6 +12,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/Mrpye/golib/dir"
+	"github.com/Mrpye/golib/path"
 )
 
 // Compress creates a archive from the folder inputFilePath points to in the file outputFilePath points to.
@@ -25,12 +22,12 @@ import (
 // It tries to create the directory structure outputFilePath contains if it doesn't exist.
 // It returns potential errors to be checked or nil if everything works.
 func Compress(inputFilePath, outputFilePath string) (err error) {
-	inputFilePath = StripTrailingSlashes(inputFilePath)
+	inputFilePath = path.StripTrailingSlashes(inputFilePath)
 	inputFilePath, outputFilePath, err = makeAbsolute(inputFilePath, outputFilePath)
 	if err != nil {
 		return err
 	}
-	undoDir, err := MakeDirAllWithRemove(filepath.Dir(outputFilePath), 0755)
+	undoDir, err := dir.MakeDirAllWithRemove(filepath.Dir(outputFilePath), 0755)
 	if err != nil {
 		return err
 	}
@@ -53,12 +50,12 @@ func Compress(inputFilePath, outputFilePath string) (err error) {
 // It tries to create the directory structure outputFilePath contains if it doesn't exist.
 // It returns potential errors to be checked or nil if everything works.
 func Extract(inputFilePath, outputFilePath string) (err error) {
-	outputFilePath = StripTrailingSlashes(outputFilePath)
+	outputFilePath = path.StripTrailingSlashes(outputFilePath)
 	inputFilePath, outputFilePath, err = makeAbsolute(inputFilePath, outputFilePath)
 	if err != nil {
 		return err
 	}
-	undoDir, err := MakeDirAllWithRemove(outputFilePath, 0755)
+	undoDir, err := dir.MakeDirAllWithRemove(outputFilePath, 0755)
 	if err != nil {
 		return err
 	}
@@ -130,7 +127,7 @@ func compress(inPath, outFilePath, subPath string) (err error) {
 	return nil
 }
 
-// Read a directy and write it to the tar writer. Recursive function that writes all sub folders.
+// Read a directory and write it to the tar writer. Recursive function that writes all sub folders.
 func writeDirectory(directory string, tarWriter *tar.Writer, subPath string) error {
 	files, err := ioutil.ReadDir(directory)
 	if err != nil {
@@ -269,6 +266,8 @@ func extract(filePath string, directory string) error {
 	return nil
 }
 
+// It opens a gzip file, reads it as a tar file, and returns the contents of the file with the name you
+// specify
 func ExtractFile(filePath string, file_name string) ([]byte, error) {
 	file, err := os.Open(filePath)
 	if err != nil {

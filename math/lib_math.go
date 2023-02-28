@@ -1,4 +1,4 @@
-package lib
+package math
 
 // Minus subtracts two integers
 func Minus(a, b int) int {

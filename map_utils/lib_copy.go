@@ -1,6 +1,7 @@
-package lib
+// Package of utilities for working with maps
+package map_utils
 
-// CopyMap make a copy of a map
+// CopyMap takes a map of strings to interfaces and returns a copy of that map
 func CopyMap(m map[string]interface{}) map[string]interface{} {
 	cp := make(map[string]interface{})
 	for k, v := range m {
@@ -11,6 +12,5 @@ func CopyMap(m map[string]interface{}) map[string]interface{} {
 			cp[k] = v
 		}
 	}
-
 	return cp
 }

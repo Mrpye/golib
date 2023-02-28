@@ -1,4 +1,5 @@
-package lib
+// Package for working with directories
+package dir
 
 import (
 	"archive/zip"
@@ -10,11 +11,11 @@ import (
 	"syscall"
 )
 
-// ZipFolder zips a folder
-func ZipFolder(ZipFile string, zipFolder string) {
+// It takes a folder and zips it into a zip file
+func ZipFolder(ZipFile string, zipFolder string) error {
 	file, err := os.Create(ZipFile)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer file.Close()
 
@@ -35,14 +36,6 @@ func ZipFolder(ZipFile string, zipFolder string) {
 		}
 		defer file.Close()
 
-		// Ensure that `path` is not absolute; it should not start with "/".
-		// This snippet happens to work because I don't use
-		// absolute paths, but ensure your real-world code
-		// transforms path into a zip-root relative path.
-		/*log.Print(path)
-		parts := strings.Split(path, string(os.PathSeparator))
-		cleaned := parts[1:]
-		path = strings.Join(cleaned, string(os.PathSeparator))*/
 		f, err := w.Create(path)
 		if err != nil {
 			return err
@@ -55,22 +48,23 @@ func ZipFolder(ZipFile string, zipFolder string) {
 
 		return nil
 	}
+
 	err = filepath.Walk(zipFolder, walker)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	defer file.Close()
-
+	//defer file.Close()
+	return nil
 }
 
-// MakeDir creates a directory if it does not exist
+// > MakeDirAll creates a directory and all its parent directories if they don't exist
 func MakeDirAll(filename string) error {
 	file := path.Dir(filename)
 	return os.MkdirAll(file, os.ModePerm)
 }
 
-//Check if Dir Exists
+// If the path exists, return true, otherwise return false
 func DirExists(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return false
@@ -132,6 +126,7 @@ func MakeDirAllWithRemove(dirPath string, perm os.FileMode) (func(), error) {
 	return func() { os.RemoveAll(undoDir) }, nil
 }
 
+// It opens the directory, reads the names of all the files in the directory, and then deletes them
 func RemoveContents(dir string) error {
 	d, err := os.Open(dir)
 	if err != nil {
