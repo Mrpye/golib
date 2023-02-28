@@ -50,7 +50,7 @@ go get github.com/Mrpye/golib
 
 ---
 
-```
+
 ## Todo: 
 - Just keep collectinf functions
 ---
@@ -67,7 +67,10 @@ go get github.com/Mrpye/golib
 - Lots of unit tests
 - Improved the convert
 
-
+### v0.2.1
+- Fix the log.ActionLog
+- Lots of unit tests
+- Improved the convert
 
 
 ## license
