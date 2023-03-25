@@ -94,6 +94,14 @@ func ReadFileToString(sourceFile string) (string, error) {
 	return string(input), nil
 }
 
+func ReadFile(sourceFile string) ([]byte, error) {
+	input, err := ioutil.ReadFile(sourceFile)
+	if err != nil {
+		return nil, err
+	}
+	return input, nil
+}
+
 // If the file exists, return true, otherwise return false
 func FileExists(path string) bool {
 	_, err := os.Stat(path)
