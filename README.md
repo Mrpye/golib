@@ -82,7 +82,7 @@ go get github.com/Mrpye/golib
     - Added ReadFile 
     - Logs updated to handle different colors for border
     - added CheckNotBlank in string
-    - GzipBase64 function
+    - GzipBase64 function 
 
 ## license
 golib is Apache 2.0 licensed.
