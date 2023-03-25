@@ -74,7 +74,15 @@ go get github.com/Mrpye/golib
     - ActionLogDateOK
     - ActionLogDateFail
 
-
+### v0.2.2
+- Fix the log.ActionLog formatting
+- added:
+    - Added Type checks
+    - Base64EncString made to can take a  []byte or string
+    - Added ReadFile 
+    - Logs updated to handle different colors for border
+    - added CheckNotBlank in string
+    - GzipBase64 function 
 
 ## license
 golib is Apache 2.0 licensed.

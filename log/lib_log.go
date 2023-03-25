@@ -39,7 +39,7 @@ func (l *LogStreamer) Write(p []byte) (n int, err error) {
 // actionLog is a function that takes a string and a rune as arguments and prints a header with the string in the middle, and the
 // rune as the border
 // It also prints the date and time in the middle of the header
-func actionLog(Header string, char rune, show_date bool) {
+func actionLog(Header string, char rune, show_date bool, border_color int) {
 
 	//conmpare rune
 	if char == 0 {
@@ -68,13 +68,39 @@ func actionLog(Header string, char rune, show_date bool) {
 		}
 	}
 
-	color_blue := color.FgBlue.Render                                                               //colour_blue := color.FgBlue.Render
-	str_len_as_str := fmt.Sprintf("%d", str_len-6)                                                  // convert the str_len to a string minus the 6 characters for the "** " and " **"
-	border := color_blue(strings.Repeat(string(char), str_len))                                     // create a string of the length of the border
-	Header = fmt.Sprintf("%s %-"+str_len_as_str+"s %s", color_blue("**"), Header, color_blue("**")) // create a string for the header
+	color_blue := color.FgBlue.Render
+	color_red := color.FgRed.Render
+	color_green := color.FgGreen.Render
+	//colour_blue := color.FgBlue.Render
+	str_len_as_str := fmt.Sprintf("%d", str_len-6)
+	border := ""
+
+	// convert the str_len to a string minus the 6 characters for the "** " and " **"
+	// create a string of the length of the border
+	if border_color == 0 {
+		border = color_blue(strings.Repeat(string(char), str_len))
+	} else if border_color == 1 {
+		border = color_red(strings.Repeat(string(char), str_len))
+	} else if border_color == 2 {
+		border = color_green(strings.Repeat(string(char), str_len))
+	}
+
+	if border_color == 0 {
+		Header = fmt.Sprintf("%s %-"+str_len_as_str+"s %s", color_blue("**"), Header, color_blue("**")) // create a string for the header
+	} else if border_color == 1 {
+		Header = fmt.Sprintf("%s %-"+str_len_as_str+"s %s", color_red("**"), Header, color_red("**")) // create a string for the header
+	} else if border_color == 2 {
+		Header = fmt.Sprintf("%s %-"+str_len_as_str+"s %s", color_green("**"), Header, color_green("**")) // create a string for the header
+	}
 
 	if show_date {
-		dt_string = fmt.Sprintf("%s %-"+str_len_as_str+"s %s", color_blue("**"), dt_string, color_blue("**")) // create a string for the date
+		if border_color == 0 {
+			dt_string = fmt.Sprintf("%s %-"+str_len_as_str+"s %s", color_blue("**"), dt_string, color_blue("**")) // create a string for the date
+		} else if border_color == 1 {
+			dt_string = fmt.Sprintf("%s %-"+str_len_as_str+"s %s", color_red("**"), dt_string, color_red("**")) // create a string for the date
+		} else if border_color == 2 {
+			dt_string = fmt.Sprintf("%s %-"+str_len_as_str+"s %s", color_green("**"), dt_string, color_green("**")) // create a string for the date
+		}
 		//********************
 		//Print the action log
 		//********************
@@ -91,39 +117,52 @@ func actionLog(Header string, char rune, show_date bool) {
 // rune as the border
 // It also prints the date and time in the middle of the header
 func ActionLogDT(Header string, char rune) {
-	actionLog(Header, char, true)
+	actionLog(Header, char, true, 0)
 }
 
 // It takes a string and a rune as input, and prints a header with the string in the middle, and the
 // rune as the border
 func ActionLog(Header string, char rune) {
-	actionLog(Header, char, true)
+	actionLog(Header, char, true, 0)
+}
+
+// ActionLogOK() is a function that takes a string and a rune as arguments and returns nothing
+func ActionLogGreen(Header string, char rune) {
+	color_green := color.FgGreen.Render
+	actionLog(fmt.Sprintf("%s: %s", Header, color_green("OK")), char, true, 2)
+}
+
+// ActionLogFail() is a function that takes a string and a rune as arguments and prints a red "Fail"
+// message to the console
+func ActionLogRed(Header string, char rune) {
+	color_red := color.FgRed.Render
+	actionLog(fmt.Sprintf("%s: %s", Header, color_red("Fail")), char, true, 1)
 }
 
 // ActionLogOK() is a function that takes a string and a rune as arguments and returns nothing
 func ActionLogOK(Header string, char rune) {
 	color_green := color.FgGreen.Render
-	actionLog(fmt.Sprintf("%s: %s", Header, color_green("OK")), char, false)
+	actionLog(fmt.Sprintf("%s: %s", Header, color_green("OK")), char, false, 0)
 }
 
 // ActionLogFail() is a function that takes a string and a rune as arguments and prints a red "Fail"
 // message to the console
 func ActionLogFail(Header string, char rune) {
 	color_red := color.FgRed.Render
-	actionLog(fmt.Sprintf("%s: %s", Header, color_red("Fail")), char, false)
+	actionLog(fmt.Sprintf("%s: %s", Header, color_red("Fail")), char, false, 0)
 }
 
 // ActionLogOK() is a function that takes a string and a rune as arguments and returns nothing
 func ActionLogDateOK(Header string, char rune) {
 	color_green := color.FgGreen.Render
-	actionLog(fmt.Sprintf("%s: %s", Header, color_green("OK")), char, true)
+	actionLog(fmt.Sprintf("%s: %s", Header, color_green("OK")), char, true, 0)
 }
 
 // ActionLogFail() is a function that takes a string and a rune as arguments and prints a red "Fail"
 // message to the console
 func ActionLogDateFail(Header string, char rune) {
 	color_red := color.FgRed.Render
-	actionLog(fmt.Sprintf("%s: %s", Header, color_red("Fail")), char, true)
+	actionLog(fmt.Sprintf("%s: %s", Header, color_red("Fail")), char, true, 0)
 }
 
 // `PrintlnOK` prints a message in green color

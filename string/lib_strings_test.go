@@ -39,7 +39,7 @@ func TestRemoveSpacesForUnderscores(t *testing.T) {
 func TestConcat(t *testing.T) {
 	input := []string{"Hello", "World"}
 	expected := "Hello-World"
-	actual := Concat("-", input...)
+	actual := Concat("-", "Hello", "World")
 	if actual != expected {
 		t.Errorf("Concat(%s) = %s; want %s", input, actual, expected)
 	}
@@ -141,5 +141,72 @@ func TestCommaListContainsString(t *testing.T) {
 	actual := CommaListContainsString(input, "123")
 	if actual != expected {
 		t.Errorf("CommaListContainsString(%s) = %t; want %t", input, actual, expected)
+	}
+}
+
+func TestCheckNotBlank(t *testing.T) {
+	type args struct {
+		value []string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr error
+	}{
+		{
+			name: "CheckNotBlank",
+			args: args{
+				value: []string{"Hello", "World"},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "CheckNotBlank",
+			args: args{
+				value: []string{"Hello", "", "World"},
+			},
+			wantErr: Err_ValueIsBlank,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := CheckNotBlank(tt.args.value...); err != tt.wantErr {
+				t.Errorf("CheckNotBlank() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestGzipBase64(t *testing.T) {
+	type args struct {
+		data interface{}
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+		{
+			name: "GzipBase64",
+			args: args{
+				data: "Hello World",
+			},
+			want:    "H4sIAAAAAAAA//JIzcnJVwjPL8pJAQQAAP//VrEXSgsAAAA=",
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := GzipBase64(tt.args.data)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GzipBase64() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("GzipBase64() = %v, want %v", got, tt.want)
+			}
+		})
 	}
 }

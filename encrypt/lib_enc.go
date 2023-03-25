@@ -59,10 +59,15 @@ func decrypt(data []byte, passphrase string) ([]byte, error) {
 	return plaintext, nil
 }
 
-// It takes a string, converts it to a byte array, then encodes it to a base64 string
-func Base64EncString(value string) string {
-	sEnc := b64.StdEncoding.EncodeToString([]byte(value))
-	return sEnc
+// It takes a string or []byte, converts it to a byte array, then encodes it to a base64 string
+func Base64EncString(value interface{}) string {
+	switch v := value.(type) {
+	case []byte:
+		return b64.StdEncoding.EncodeToString(v)
+	case string:
+		return b64.StdEncoding.EncodeToString([]byte(v))
+	}
+	return ""
 }
 
 // It takes a string, decodes it from base64, and returns the decoded string

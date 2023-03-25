@@ -1,16 +1,18 @@
-//Package string provides a set of functions for working with strings
+// Package string provides a set of functions for working with strings
 package string
 
 import (
 	"bytes"
 	"compress/gzip"
 	b64 "encoding/base64"
+	"fmt"
 	"net"
 	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
 
+	"github.com/Mrpye/golib/convert"
 	uuid "github.com/nu7hatch/gouuid"
 )
 
@@ -20,12 +22,47 @@ const (
 	INPUT_TYPE_FLOAT = "float"
 )
 
+var Err_ValueIsBlank = fmt.Errorf("a value is blank")
+
+// CheckNotBlank takes a list of strings and returns an error if any of the strings are blank
+func CheckNotBlank(value ...string) error {
+	for _, v := range value {
+		if v == "" {
+			return Err_ValueIsBlank
+		}
+	}
+	return nil
+}
+
 // It takes a string, compresses it, and then base64 encodes it
 func GzipBase64String(data string) (string, error) {
 	var b bytes.Buffer
 	gz := gzip.NewWriter(&b)
+
 	if _, err := gz.Write([]byte(data)); err != nil {
 		return "", err
+	}
+	if err := gz.Close(); err != nil {
+		return "", err
+	}
+	sEnc := b64.StdEncoding.EncodeToString(b.Bytes())
+	return sEnc, nil
+}
+
+// It takes a string, compresses it, and then base64 encodes it
+func GzipBase64(data interface{}) (string, error) {
+	var b bytes.Buffer
+	gz := gzip.NewWriter(&b)
+
+	switch v := data.(type) {
+	case []byte:
+		if _, err := gz.Write(v); err != nil {
+			return "", err
+		}
+	case string:
+		if _, err := gz.Write([]byte(v)); err != nil {
+			return "", err
+		}
 	}
 	if err := gz.Close(); err != nil {
 		return "", err
@@ -50,8 +87,12 @@ func RemoveSpacesForUnderscores(name string) string {
 }
 
 // Concat takes a string and a list of strings and returns a string.
-func Concat(sep string, strs ...string) string {
-	return strings.Join(strs, sep)
+func Concat(sep string, strs ...any) string {
+	var str []string
+	for _, s := range strs {
+		str = append(str, convert.ToString(s))
+	}
+	return strings.Join(str, sep)
 }
 
 // IsNumber returns true if a string is a number
