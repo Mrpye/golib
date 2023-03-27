@@ -1,4 +1,4 @@
-// Package targz contains methods to create and extract tar gz archives.
+// Package for working with tar.gz files
 package compression
 
 import (
@@ -21,6 +21,9 @@ import (
 // Only adds the last directory in inputFilePath to the archive, not the whole path.
 // It tries to create the directory structure outputFilePath contains if it doesn't exist.
 // It returns potential errors to be checked or nil if everything works.
+// - inputFilePath: the path to the folder to compress
+// - outputFilePath: the path to the archive to create
+// - returns: an error if there is one
 func Compress(inputFilePath, outputFilePath string) (err error) {
 	inputFilePath = path.StripTrailingSlashes(inputFilePath)
 	inputFilePath, outputFilePath, err = makeAbsolute(inputFilePath, outputFilePath)
@@ -49,6 +52,9 @@ func Compress(inputFilePath, outputFilePath string) (err error) {
 // Extract extracts a archive from the file inputFilePath points to in the directory outputFilePath points to.
 // It tries to create the directory structure outputFilePath contains if it doesn't exist.
 // It returns potential errors to be checked or nil if everything works.
+// - inputFilePath: the path to the archive to extract
+// - outputFilePath: the path to the folder to create
+// - returns: an error if there is one
 func Extract(inputFilePath, outputFilePath string) (err error) {
 	outputFilePath = path.StripTrailingSlashes(outputFilePath)
 	inputFilePath, outputFilePath, err = makeAbsolute(inputFilePath, outputFilePath)
@@ -69,6 +75,10 @@ func Extract(inputFilePath, outputFilePath string) (err error) {
 }
 
 // Make input and output paths absolute.
+// Returns the absolute paths and an error if there is one.
+// - inputFilePath: the path to the folder to compress
+// - outputFilePath: the path to the archive to create
+// - returns: the absolute paths and an error if there is one
 func makeAbsolute(inputFilePath, outputFilePath string) (string, string, error) {
 	inputFilePath, err := filepath.Abs(inputFilePath)
 	if err == nil {
@@ -78,9 +88,13 @@ func makeAbsolute(inputFilePath, outputFilePath string) (string, string, error) 
 	return inputFilePath, outputFilePath, err
 }
 
-// The main interaction with tar and gzip. Creates a archive and recursivly adds all files in the directory.
+// compress The main interaction with tar and gzip. Creates a archive and recursivly adds all files in the directory.
 // The finished archive contains just the directory added, not any parents.
 // This is possible by giving the whole path exept the final directory in subPath.
+// - inPath: the path to the folder to compress
+// - outFilePath: the path to the archive to create
+// - subPath: the path to the folder to compress without the last directory
+// - returns: an error if there is one
 func compress(inPath, outFilePath, subPath string) (err error) {
 	files, err := ioutil.ReadDir(inPath)
 	if err != nil {
@@ -127,7 +141,11 @@ func compress(inPath, outFilePath, subPath string) (err error) {
 	return nil
 }
 
-// Read a directory and write it to the tar writer. Recursive function that writes all sub folders.
+// writeDirectory Read a directory and write it to the tar writer. Recursive function that writes all sub folders.
+// - directory: the path to the folder to compress
+// - tarWriter: the tar writer to write to
+// - subPath: the path to the folder to compress without the last directory
+// - returns: an error if there is one
 func writeDirectory(directory string, tarWriter *tar.Writer, subPath string) error {
 	files, err := ioutil.ReadDir(directory)
 	if err != nil {
@@ -152,7 +170,12 @@ func writeDirectory(directory string, tarWriter *tar.Writer, subPath string) err
 	return nil
 }
 
-// Write path without the prefix in subPath to tar writer.
+// writeTarGz Write path without the prefix in subPath to tar writer.
+// - path: the path to the file to compress
+// - tarWriter: the tar writer to write to
+// - fileInfo: the file info of the file to compress
+// - subPath: the path to the folder to compress without the last directory
+// - returns: an error if there is one
 func writeTarGz(path string, tarWriter *tar.Writer, fileInfo os.FileInfo, subPath string) error {
 	file, err := os.Open(path)
 	if err != nil {
@@ -195,7 +218,10 @@ func writeTarGz(path string, tarWriter *tar.Writer, fileInfo os.FileInfo, subPat
 	return err
 }
 
-// Extract the file in filePath to directory.
+// extract the file in filePath to directory.
+// - filePath: the path to the archive to extract
+// - directory: the path to the folder to extract to
+// - returns: an error if there is one
 func extract(filePath string, directory string) error {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -266,8 +292,12 @@ func extract(filePath string, directory string) error {
 	return nil
 }
 
-// It opens a gzip file, reads it as a tar file, and returns the contents of the file with the name you
+// ExtractFile It opens a gzip file, reads it as a tar file, and returns the contents of the file with the name you
 // specify
+// - filePath: the path to the archive to extract
+// - file_name: the name of the file to extract
+// - returns: the contents of the file with the name you specify
+// - returns: an error if there is one
 func ExtractFile(filePath string, file_name string) ([]byte, error) {
 	file, err := os.Open(filePath)
 	if err != nil {

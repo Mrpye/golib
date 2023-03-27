@@ -29,6 +29,9 @@ func (l *LogStreamer) String() string {
 }
 
 // Write implements the io.Writer interface
+// It writes the output to the console and the buffer
+// - p: the data to write
+// - returns: the number of bytes written and an error if there is one
 func (l *LogStreamer) Write(p []byte) (n int, err error) {
 	a := strings.TrimSpace(string(p))
 	l.b.WriteString(a + "\n")
@@ -39,6 +42,10 @@ func (l *LogStreamer) Write(p []byte) (n int, err error) {
 // actionLog is a function that takes a string and a rune as arguments and prints a header with the string in the middle, and the
 // rune as the border
 // It also prints the date and time in the middle of the header
+// - Header: the string to print in the middle of the header
+// - char: the rune to use as the border
+// - show_date: a boolean to show the date and time in the middle of the header
+// - border_color: an int to set the color of the border
 func actionLog(Header string, char rune, show_date bool, border_color int) {
 
 	//conmpare rune
@@ -113,33 +120,45 @@ func actionLog(Header string, char rune, show_date bool, border_color int) {
 	}
 }
 
-//ActionLogDT is a function that takes a string and a rune as arguments and prints a header with the string , and the
+// ActionLogDT is a function that takes a string and a rune as arguments and prints a header with the string , and the
 // rune as the border
 // It also prints the date and time in the middle of the header
+// - Header: the string to print in the middle of the header
+// - char: the rune to use as the border
 func ActionLogDT(Header string, char rune) {
 	actionLog(Header, char, true, 0)
 }
 
-// It takes a string and a rune as input, and prints a header with the string in the middle, and the
+// ActionLog It takes a string and a rune as input, and prints a header with the string in the middle, and the
 // rune as the border
+// - Header: the string to print in the middle of the header
+// - char: the rune to use as the border
 func ActionLog(Header string, char rune) {
 	actionLog(Header, char, true, 0)
 }
 
-// ActionLogOK() is a function that takes a string and a rune as arguments and returns nothing
+// ActionLogGreen() is a function that takes a string and a rune as arguments and returns nothing
+// It prints a green "OK" message to the console with green border
+// - Header: the string to print in the middle of the header
+// - char: the rune to use as the border
 func ActionLogGreen(Header string, char rune) {
 	color_green := color.FgGreen.Render
 	actionLog(fmt.Sprintf("%s: %s", Header, color_green("OK")), char, true, 2)
 }
 
-// ActionLogFail() is a function that takes a string and a rune as arguments and prints a red "Fail"
-// message to the console
+// ActionLogRed() is a function that takes a string and a rune as arguments and prints a red "Fail"
+// message to the console with a red border
+// - Header: the string to print in the middle of the header
+// - char: the rune to use as the border
 func ActionLogRed(Header string, char rune) {
 	color_red := color.FgRed.Render
 	actionLog(fmt.Sprintf("%s: %s", Header, color_red("Fail")), char, true, 1)
 }
 
 // ActionLogOK() is a function that takes a string and a rune as arguments and returns nothing
+// It prints a green "OK" message to the console
+// - Header: the string to print in the middle of the header
+// - char: the rune to use as the border
 func ActionLogOK(Header string, char rune) {
 	color_green := color.FgGreen.Render
 	actionLog(fmt.Sprintf("%s: %s", Header, color_green("OK")), char, false, 0)
@@ -147,54 +166,68 @@ func ActionLogOK(Header string, char rune) {
 
 // ActionLogFail() is a function that takes a string and a rune as arguments and prints a red "Fail"
 // message to the console
+// - Header: the string to print in the middle of the header
+// - char: the rune to use as the border
 func ActionLogFail(Header string, char rune) {
 	color_red := color.FgRed.Render
 	actionLog(fmt.Sprintf("%s: %s", Header, color_red("Fail")), char, false, 0)
 }
 
-// ActionLogOK() is a function that takes a string and a rune as arguments and returns nothing
+// ActionLogDateOK() is a function that takes a string and a rune as arguments
+// and print a green "OK" message to the console with a green border and the date and time
+// - Header: the string to print in the middle of the header
+// - char: the rune to use as the border
 func ActionLogDateOK(Header string, char rune) {
 	color_green := color.FgGreen.Render
 	actionLog(fmt.Sprintf("%s: %s", Header, color_green("OK")), char, true, 0)
 }
 
-// ActionLogFail() is a function that takes a string and a rune as arguments and prints a red "Fail"
-// message to the console
+// ActionLogDateFail() is a function that takes a string and a rune as arguments
+// and print a red "Fail" message to the console with a red border and the date and time
+// - Header: the string to print in the middle of the header
+// - char: the rune to use as the border
 func ActionLogDateFail(Header string, char rune) {
 	color_red := color.FgRed.Render
 	actionLog(fmt.Sprintf("%s: %s", Header, color_red("Fail")), char, true, 0)
 }
 
-// `PrintlnOK` prints a message in green color
+// `PrintlnOK` prints a message in green color OK
+// - msg: the string to print
 func PrintlnOK(msg string) {
 	color_green := color.FgGreen.Render
 	log.Printf("%s: %s\n", msg, color_green("OK"))
 }
 
-// `PrintlnFail` is a function that takes a string as an argument and prints it to the console in red
+// `PrintlnFail` prints a message and fail in red color
+// - msg: the string to print
 func PrintlnFail(msg string) {
 	color_red := color.FgRed.Render
 	log.Printf("%s: %s\n", msg, color_red("Fail"))
 }
 
-// `PrintOK` prints a message in green color
+// `PrintOK` prints a message and OK in green color
+// - msg: the string to print
 func PrintOK(msg string) {
 	color_green := color.FgGreen.Render
 	log.Printf("%s: %s", msg, color_green("OK"))
 }
 
-// `PrintFail` is a function that takes a string as an argument and prints it in red
+// `PrintFail` prints a message and fail in red color
+// - msg: the string to print
 func PrintFail(msg string) {
 	color_red := color.FgRed.Render
 	log.Printf("%s: %s", msg, color_red("Fail"))
 }
 
 // `LogVerbose` is a function that takes a string and prints it to the console in magenta
+// - msg: the string to print
 func LogVerbose(msg string) {
 	color_magenta := color.FgMagenta.Render
 	fmt.Print(color_magenta(msg))
 }
 
+// `LogInterfaceVerbose` is a function that takes an interface and prints it to the console in magenta
+// - data: the interface to print
 func LogInterfaceVerbose(data interface{}) {
 	color_magenta := color.FgMagenta.Render
 	msg, err := json.Marshal(data)
@@ -205,13 +238,25 @@ func LogInterfaceVerbose(data interface{}) {
 	fmt.Print(color_magenta(msg))
 }
 
-// It takes a title, data, and format, and prints the data in the specified format
+// `FormatResults` is a function that takes a string, an interface and a string as arguments and formats the data
+// before printing it to the console
+// - title: the string to print in the middle of the header
+// - data: the interface to print
+// - format: the format to use to print the data
+//   - json
+//   - yaml
+//   - toml
+//   - xml
+//   - plain
+//   - default: json
+//
+// - returns an error
 func FormatResults(title string, data interface{}, format string) error {
 	color_magenta := color.FgMagenta.Render
 	str_buf := fmt.Sprintf("%s\n", color_magenta(title))
 	w, err := gout.New()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	switch strings.ToLower(format) {

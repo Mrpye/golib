@@ -30,7 +30,7 @@ func TestBase64EncString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Base64EncString(tt.args.value); got != tt.want {
+			if got, _ := Base64EncString(tt.args.value); got != tt.want {
 				t.Errorf("Base64EncString() = %v, want %v", got, tt.want)
 			}
 		})
@@ -56,7 +56,7 @@ func TestBase64DecString(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Base64DecString(tt.args.value); got != tt.want {
+			if got, _ := Base64DecString(tt.args.value); got != tt.want {
 				t.Errorf("Base64DecString() = %v, want %v", got, tt.want)
 			}
 		})

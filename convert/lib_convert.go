@@ -1,4 +1,5 @@
-// This package contains helper functions for that are related to converting interfaces to other types.
+// This package contains helper functions for that are related to converting interfaces to other types and
+// checking the type of an interface
 package convert
 
 import (
@@ -9,6 +10,8 @@ import (
 
 // `ToPassFail` takes a boolean value and returns a string value of either "Pass" or "Fail" depending
 // on the boolean value
+// - value: the boolean value to convert
+// - returns: a string value of either "Pass" or "Fail"
 func ToPassFail(value bool) string {
 	if value {
 		return "Pass"
@@ -18,6 +21,8 @@ func ToPassFail(value bool) string {
 
 // If the value is a string, it will return true if the string is "t", "true", "yes", "y", "1", "pass",
 // or "0". Otherwise, it will return false
+// - value: the value to convert
+// - returns: a boolean value
 func ToBool(value interface{}) bool {
 	switch val := value.(type) {
 	case bool:
@@ -63,7 +68,9 @@ func ToBool(value interface{}) bool {
 	}
 }
 
-// It takes an interface{} and returns a string
+// ToString will convert the value to a string
+// - value: the value to convert
+// - returns: a string value
 func ToString(value interface{}) string {
 
 	switch val := value.(type) {
@@ -82,7 +89,9 @@ func ToString(value interface{}) string {
 	}
 }
 
-// If the value is a string, convert it to an int64, otherwise convert it to an int
+// ToInt will convert the value to an int
+// - value: the value to convert
+// - returns: an int value
 func ToInt(value interface{}) int {
 	switch val := value.(type) {
 	case bool:
@@ -122,7 +131,9 @@ func ToInt(value interface{}) int {
 	}
 }
 
-// It converts any value to an int8
+// ToInt8 will convert the value to an int8
+// - value: the value to convert
+// - returns: an int8 value
 func ToInt8(value interface{}) int8 {
 	switch val := value.(type) {
 	case bool:
@@ -162,10 +173,9 @@ func ToInt8(value interface{}) int8 {
 	}
 }
 
-// If the value is a string, convert it to an int32. If the value is a float, convert it to an int32.
-// If the value is a bool, convert it to an int32. If the value is an int, convert it to an int32. If
-// the value is an int64, convert it to an int32. If the value is an int32, return it. If the value is
-// anything else, return 0
+// ToInt32 will convert the value to an int32
+// - value: the value to convert
+// - returns: an int32 value
 func ToInt32(value interface{}) int32 {
 	switch val := value.(type) {
 	case bool:
@@ -205,9 +215,9 @@ func ToInt32(value interface{}) int32 {
 	}
 }
 
-// If the value is a string, convert it to an int64. If the value is a float, convert it to an int64.
-// If the value is a bool, convert it to an int64. If the value is an int, convert it to an int64. If
-// the value is an int64, return it. If the value is anything else, return 0
+// ToInt64 will convert the value to an int64
+// - value: the value to convert
+// - returns: an int64 value
 func ToInt64(value interface{}) int64 {
 	switch val := value.(type) {
 	case bool:
@@ -247,7 +257,9 @@ func ToInt64(value interface{}) int64 {
 	}
 }
 
-// If the value is a string, convert it to a float32. Otherwise, return the value as a float32
+// ToFloat32 will convert the value to a float32
+// - value: the value to convert
+// - returns: a float32 value
 func ToFloat32(value interface{}) float32 {
 	switch val := value.(type) {
 	case bool:
@@ -276,9 +288,9 @@ func ToFloat32(value interface{}) float32 {
 	}
 }
 
-// If the value is a string, convert it to a float64. If the value is a bool, convert it to a float64.
-// If the value is an int, convert it to a float64. If the value is a float64, return it. Otherwise,
-// return 0
+// ToFloat64 will convert the value to a float64
+// - value: the value to convert
+// - returns: a float64 value
 func ToFloat64(value interface{}) float64 {
 	switch val := value.(type) {
 	case bool:
@@ -305,7 +317,9 @@ func ToFloat64(value interface{}) float64 {
 	}
 }
 
-// If the value is a map[string]interface{}, return it, otherwise return nil
+// ToMapInterface will convert the interface of a map to a map of interfaces
+// - value: the value to convert
+// - returns: a map of interfaces
 func ToMapInterface(value interface{}) map[string]interface{} {
 	switch val := value.(type) {
 	case map[string]interface{}:
@@ -315,7 +329,9 @@ func ToMapInterface(value interface{}) map[string]interface{} {
 	}
 }
 
-// It takes a map of strings to interfaces and returns a map of strings to strings
+// ToMapString will convert the interface of a map to a map of strings
+// - value: the value to convert
+// - returns: a map of strings
 func ToMapString(value interface{}) map[string]string {
 	switch val := value.(type) {
 	case map[string]interface{}:
@@ -370,7 +386,9 @@ func ToMapString(value interface{}) map[string]string {
 	}
 }
 
-// It takes a map of strings to interfaces, and returns a map of strings to ints
+// ToMapInt will convert the interface of a map to a map of ints
+// - value: the value to convert
+// - returns: a map of ints
 func ToMapInt(value interface{}) map[string]int {
 	switch val := value.(type) {
 	case map[string]interface{}:
@@ -417,7 +435,9 @@ func ToMapInt(value interface{}) map[string]int {
 	}
 }
 
-// It takes a map of strings to interfaces, and returns a map of strings to float32s
+// ToMapFloat32 will convert the interface of a map to a map of float32s
+// - value: the value to convert
+// - returns: a map of float32s
 func ToMapFloat32(value interface{}) map[string]float32 {
 	switch val := value.(type) {
 	case map[string]interface{}:
@@ -472,7 +492,9 @@ func ToMapFloat32(value interface{}) map[string]float32 {
 	}
 }
 
-// It takes a map of strings to interfaces, and returns a map of strings to floats
+// ToMapFloat64 will convert the interface of a map to a map of float64s
+// - value: the value to convert
+// - returns: a map of float64s
 func ToMapFloat64(value interface{}) map[string]float64 {
 	switch val := value.(type) {
 	case map[string]interface{}:
@@ -527,7 +549,9 @@ func ToMapFloat64(value interface{}) map[string]float64 {
 	}
 }
 
-// If the value is an array, return it as an array of interfaces
+// ToArrayInterface will convert the interface of an array to an array of interfaces
+// - value: the value to convert
+// - returns: an array of interfaces
 func ToArrayInterface(value interface{}) []interface{} {
 
 	switch val := value.(type) {
@@ -574,7 +598,9 @@ func ToArrayInterface(value interface{}) []interface{} {
 	}
 }
 
-// If the value is an array of strings, return the array, otherwise return nil
+// ToArrayString will convert the interface of an array to an array of strings
+// - value: the value to convert
+// - returns: an array of strings
 func ToArrayString(value interface{}) []string {
 	switch val := value.(type) {
 	case []interface{}:
@@ -622,7 +648,9 @@ func ToArrayString(value interface{}) []string {
 	}
 }
 
-// If the value is an array of ints, return it, otherwise return nil
+// ToArrayInt will convert the interface of an array to an array of ints
+// - value: the value to convert
+// - returns: an array of ints
 func ToArrayInt(value interface{}) []int {
 	switch val := value.(type) {
 	case []interface{}:
@@ -669,7 +697,9 @@ func ToArrayInt(value interface{}) []int {
 	}
 }
 
-// If the value is an array of float32, return the value as an array of float32
+// ToArrayFloat32 will convert the interface of an array to an array of float32s
+// - value: the value to convert
+// - returns: an array of float32s
 func ToArrayFloat32(value interface{}) []float32 {
 	switch val := value.(type) {
 	case []interface{}:
@@ -717,7 +747,9 @@ func ToArrayFloat32(value interface{}) []float32 {
 	}
 }
 
-// If the value is an array of float64, return it, otherwise return nil
+// ToArrayFloat64 will convert the interface of an array to an array of float64s
+// - value: the value to convert
+// - returns: an array of float64s
 func ToArrayFloat64(value interface{}) []float64 {
 	switch val := value.(type) {
 	case []interface{}:
@@ -768,7 +800,9 @@ func ToArrayFloat64(value interface{}) []float64 {
 	}
 }
 
-// If the value is an array of strings, return the array of strings, otherwise return nil
+// ToArrayBool will convert the interface of an array to an array of bools
+// - value: the value to convert
+// - returns: an array of bools
 func ToArrayBool(value interface{}) []bool {
 	switch val := value.(type) {
 	case []interface{}:
@@ -819,7 +853,9 @@ func ToArrayBool(value interface{}) []bool {
 	}
 }
 
-// It returns the type of the value passed to it as a string
+// GetType will return the type of the value as a string
+// - value: the value to get the type of
+// - returns: the type of the value as a string
 func GetType(value interface{}) string {
 	//Return the type as a string
 	return reflect.TypeOf(value).Kind().String()
