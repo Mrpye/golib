@@ -11,7 +11,10 @@ import (
 	"syscall"
 )
 
-// It takes a folder and zips it into a zip file
+// ZipFolder zips a folder and all its contents
+// - ZipFile: the name of the zip file to create
+// - zipFolder: the folder to zip
+// - returns: an error if there is one
 func ZipFolder(ZipFile string, zipFolder string) error {
 	file, err := os.Create(ZipFile)
 	if err != nil {
@@ -58,13 +61,18 @@ func ZipFolder(ZipFile string, zipFolder string) error {
 	return nil
 }
 
-// > MakeDirAll creates a directory and all its parent directories if they don't exist
+//	MakeDirAll creates a directory and all its parent directories if they don't exist
+//
+// - filename: the name of the file to create
+// - returns: an error if there is one
 func MakeDirAll(filename string) error {
 	file := path.Dir(filename)
 	return os.MkdirAll(file, os.ModePerm)
 }
 
-// If the path exists, return true, otherwise return false
+// DirExists If the path exists, return true, otherwise return false
+// - path: the path to check
+// - returns: true if the path exists, otherwise false
 func DirExists(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return false
@@ -85,6 +93,9 @@ func DirExists(path string) bool {
 		}
 	}()
 */
+// - dirPath: the path to the directory to create
+// - perm: the permissions to set on the directory
+// - returns: a function to remove the directory and an error if there is one
 func MakeDirAllWithRemove(dirPath string, perm os.FileMode) (func(), error) {
 	var undoDir string
 
@@ -126,7 +137,9 @@ func MakeDirAllWithRemove(dirPath string, perm os.FileMode) (func(), error) {
 	return func() { os.RemoveAll(undoDir) }, nil
 }
 
-// It opens the directory, reads the names of all the files in the directory, and then deletes them
+// RemoveContents removes all the contents of a directory
+// - dir: the directory to remove the contents of
+// - returns: an error if there is one
 func RemoveContents(dir string) error {
 	d, err := os.Open(dir)
 	if err != nil {

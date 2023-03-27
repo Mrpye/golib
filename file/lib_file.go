@@ -10,7 +10,10 @@ import (
 	"path"
 )
 
-// Download a file from a URL and save it to a filepath
+// DownloadFile Download a file from a URL and save it to a filepath
+// - url: the URL of the file to download
+// - filepath: the path to save the file to
+// - returns: an error if there was a problem downloading the file
 func DownloadFile(url string, filepath string) error {
 
 	// Get the data
@@ -38,7 +41,10 @@ func DownloadFile(url string, filepath string) error {
 	return err
 }
 
-// It copies a file from one location to another
+// CopyFile It copies a file from one location to another
+// - src: the source file
+// - dst: the destination file
+// - returns: the number of bytes copied and an error if there was a problem copying the file
 func CopyFile(src, dst string) (int64, error) {
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
@@ -62,8 +68,11 @@ func CopyFile(src, dst string) (int64, error) {
 	return nBytes, err
 }
 
-// It creates a directory if it doesn't exist, then creates a file if it doesn't exist, then writes the
+// SaveStringToFile It creates a directory if it doesn't exist, then creates a file if it doesn't exist, then writes the
 // content to the file
+// - filename: the path to the file to write to
+// - content: the content to write to the file
+// - returns: an error if there was a problem writing the file
 func SaveStringToFile(filename string, content string) error {
 	if content != "" {
 		file := path.Dir(filename)
@@ -85,7 +94,9 @@ func SaveStringToFile(filename string, content string) error {
 	return nil
 }
 
-// Read the contents of a file into a string
+// ReadFileToString Read the contents of a file into a string
+// - sourceFile: the path to the file to read
+// - returns: the contents of the file as a string and an error if there was a problem reading the file
 func ReadFileToString(sourceFile string) (string, error) {
 	input, err := ioutil.ReadFile(sourceFile)
 	if err != nil {
@@ -94,6 +105,9 @@ func ReadFileToString(sourceFile string) (string, error) {
 	return string(input), nil
 }
 
+// ReadFile Read the contents of a file into a byte array
+// - sourceFile: the path to the file to read
+// - returns: the contents of the file as a byte array and an error if there was a problem reading the file
 func ReadFile(sourceFile string) ([]byte, error) {
 	input, err := ioutil.ReadFile(sourceFile)
 	if err != nil {
@@ -102,7 +116,9 @@ func ReadFile(sourceFile string) ([]byte, error) {
 	return input, nil
 }
 
-// If the file exists, return true, otherwise return false
+// FileExists If the file exists, return true, otherwise return false
+// - path: the path to the file
+// - returns: true if the file exists, otherwise false
 func FileExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil

@@ -26,7 +26,9 @@ func UserHomeDir() string {
 	return os.Getenv("HOME")
 }
 
-// If the path ends with a slash, remove it
+// StripTrailingSlashes If the path ends with a slash, remove it
+// - path: the path to strip
+// - returns: the path with the trailing slash removed
 func StripTrailingSlashes(path string) string {
 	if strings.HasSuffix(path, "/") {
 		if len(path) > 0 && path[len(path)-1] == '/' {

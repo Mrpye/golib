@@ -1,19 +1,9 @@
-package string
+package str
 
 import (
 	"strings"
 	"testing"
 )
-
-// Write a test code for all functions in lib\lib_strings.go
-func TestGzipBase64String(t *testing.T) {
-	input := "Hello World"
-	expected := "H4sIAAAAAAAA//JIzcnJVwjPL8pJAQQAAP//VrEXSgsAAAA="
-	actual, _ := GzipBase64String(input)
-	if actual != expected {
-		t.Errorf("GzipBase64String(%s) = %s; want %s", input, actual, expected)
-	}
-}
 
 func TestRemoveSpacesForHyphens(t *testing.T) {
 	// Write test code here

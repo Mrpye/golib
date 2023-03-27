@@ -1,7 +1,13 @@
 # golib A Repository of useful functions
 
 ## Description
-This package contains function that I have collected and found useful and use a lot.
+golib is a collation of helper functions I have collected, written and regularly use in my projects, I have a rule if i find myself copying 
+and pasting from previous projects then it gets tidied up, documented and added to the library. that way i can easily find it for future use.
+Feel free to use be aware that things may get moved around and renamed. At some point when i am happy with it i'll make it a full release 
+and take care not to break compatibility but for now Use at you own risk.
+
+If you would like to contribute i am more than happy for the help.
+
 
 
 ---
@@ -26,7 +32,7 @@ Below is a description golib project folders and what they contain
 | map_utils      | Utility for doing stuff with maps |
 | math      | Simple Math function |
 | path      | Path function  |
-| string      | String manipulations functions |
+| str      | String manipulations functions |
 ---
 
 ## Installation and Basic usage
@@ -51,8 +57,9 @@ go get github.com/Mrpye/golib
 ---
 
 
+
 ## Todo: 
-- Just keep collectinf functions
+- Add some examples for now take a look at the tests
 ---
 
 ## Change Log
@@ -83,6 +90,9 @@ go get github.com/Mrpye/golib
     - Logs updated to handle different colors for border
     - added CheckNotBlank in string
     - GzipBase64 function 
-
+    - Moved string to str stop clashing with standard strings library
+    - Documented the functions
+    - Updated the documents
+  
 ## license
 golib is Apache 2.0 licensed.
